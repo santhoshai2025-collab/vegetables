@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vegetable Selector</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        select {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h2>Select Vegetables and Quantities</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Vegetable</th>
+        <th>Quantity</th>
+    </tr>
+    </thead>
+    <tbody id="vegTableBody"></tbody>
+</table>
+
+<br>
+<button onclick="showSelection()">Submit</button>
+
+<p id="selection"></p>
+
+<script>
+    const vegetables = ["Carrot", "Potato", "Tomato", "Onion", "Spinach","DrumStick","Brinjal","Kovakai","Beans","KarunaKezhangu","Senai"];
+    const vegTableBody = document.getElementById("vegTableBody");
+
+    // Build table rows with dropdowns
+    vegetables.forEach(veg => {
+        const row = document.createElement("tr");
+
+        const vegCell = document.createElement("td");
+        vegCell.textContent = veg;
+
+        const qtyCell = document.createElement("td");
+        const qtyDropdown = document.createElement("select");
+        qtyDropdown.innerHTML = `
+        <option value="0">-- Select --</option>
+        <option value="0.25">250 gm</option>
+        <option value="0.5">500 gm</option>
+        <option value="1">1 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+        <option value="4">4 kg</option>
+        <option value="5">5 kg</option>
+      `;
+        qtyCell.appendChild(qtyDropdown);
+
+        row.appendChild(vegCell);
+        row.appendChild(qtyCell);
+        vegTableBody.appendChild(row);
+    });
+
+    function showSelection() {
+        const selections = [];
+        const rows = vegTableBody.querySelectorAll("tr");
+
+        rows.forEach((row, index) => {
+            const dropdown = row.querySelector("select");
+            if (dropdown.value !== "0") {
+                selections.push(vegetables[index] + " - " + dropdown.options[dropdown.selectedIndex].text);
+            }
+        });
+
+        // Add dotted line separator before the list
+        const message = "----Vegetables List----\n" + selections.join("\n");
+
+        // Show neatly on page
+        document.getElementById("selection").textContent =
+            selections.length > 0 ? "You selected:\n" + selections.join("\n") : "No vegetables selected.";
+
+        if (selections.length > 0) {
+            fetch("/api/sendSms", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: message })
+            })
+                .then(res => res.text())
+                .then(data => alert("SMS sent: " + data))
+                .catch(err => alert("Error sending SMS: " + err));
+        }
+    }
+
+
+
+
+</script>
+
+</body>
+</html>

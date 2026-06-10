@@ -1,4 +1,4 @@
-twilio.accountSid=YOUR_ACCOUNT_SID
-twilio.authToken=YOUR_AUTH_TOKEN
-twilio.fromNumber=YOUR_TWILIO_NUMBER
-twilio.toNumber=YOUR_RECIPIENT_NUMBER
+twilio.accountSid=${TWILIO_ACCOUNT_SID}
+twilio.authToken=${TWILIO_AUTH_TOKEN}
+twilio.fromNumber=${TWILIO_FROM}
+twilio.toNumber=${TWILIO_TO}

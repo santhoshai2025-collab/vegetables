@@ -250,7 +250,7 @@
             document.getElementById("selection").textContent = "No items selected.";
             return;
         }
-        const items = Object.entries(sectionSelections).map(([item, qty]) => `${item} - ${qty}`);
+        const items = Object.entries(sectionSelections).map(([item, qty]) => `${item}-${qty}`);
         const message = "----Items List----\n" + items.join("\n");
         document.getElementById("selection").textContent = "You selected:\n" + items.join("\n");
 

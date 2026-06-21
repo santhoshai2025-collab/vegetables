@@ -1,107 +1,239 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Vegetable Selector</title>
+    <meta charset="UTF-8">
+    <title>Item Selector</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 50%;
-        }
-        th, td {
+        body { font-family: Arial, sans-serif; background: #f9f9f9; text-align: center; }
+        table { border-collapse: collapse; width: 80%; margin: 15px auto; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .option {
+            display: inline-block;
+            margin: 4px;
+            padding: 6px 10px;
             border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
+            border-radius: 4px;
+            cursor: pointer;
         }
-        th {
-            background-color: #f2f2f2;
+        .option.selected {
+            background-color: #4caf50;
+            color: white;
+            border-color: #388e3c;
         }
-        select {
-            width: 100%;
+        button {
+            margin: 8px; padding: 8px 12px;
+            background: #4caf50; color: white;
+            border: none; border-radius: 4px; cursor: pointer;
         }
+        button:hover { background: #388e3c; }
+        .hidden { display: none; }
+        #selection { margin-top: 20px; font-weight: bold; color: #333; }
     </style>
 </head>
 <body>
-<h2>Select Vegetables and Quantities</h2>
+<h2>Select Items and Quantities</h2>
 
-<table>
-    <thead>
-    <tr>
-        <th>Vegetable</th>
-        <th>Quantity</th>
-    </tr>
-    </thead>
+<!-- Toggle buttons -->
+<button onclick="showTable('vegetables')">Vegetables</button>
+<button onclick="showTable('provisionals')">Provisionals</button>
+<button onclick="showTable('special')">Special Items</button>
+
+<!-- Vegetables Table -->
+<table id="vegetablesTable" class="hidden">
+    <thead><tr><th>Vegetable</th><th>Quantity</th></tr></thead>
     <tbody id="vegTableBody"></tbody>
 </table>
+<button id="vegSubmitBtn" class="hidden" onclick="sendVegetables()">Submit Vegetables</button>
 
-<br>
-<button onclick="showSelection()">Submit</button>
+<!-- Provisionals Table -->
+<table id="provisionalsTable" class="hidden">
+    <thead><tr><th>Item</th><th>Quantity</th></tr></thead>
+    <tbody id="provTableBody"></tbody>
+</table>
+<button id="provSubmitBtn" class="hidden" onclick="sendProvisionals()">Submit Provisionals</button>
+
+<!-- Special Items Table -->
+<table id="specialTable" class="hidden">
+    <thead><tr><th>Item</th><th>Quantity</th></tr></thead>
+    <tbody id="specialTableBody"></tbody>
+</table>
+<button id="specialSubmitBtn" class="hidden" onclick="sendSpecial()">Submit Special Items</button>
 
 <p id="selection"></p>
 
 <script>
-    const vegetables = ["Carrot", "Potato", "Tomato", "Onion", "Spinach","DrumStick","Brinjal","Kovakai","Beans","KarunaKezhangu","Senai"];
+    const vegetables = [
+        "🥕 Carrot (காரட்)",
+        "🥔 Potato (உருளைக்கிழங்கு)",
+        "🍅 Tomato (தக்காளி)",
+        "🧅 Onion (வெங்காயம்)",
+        "🌿 Arai Keerai (அரை கீரை)",
+        "🌿 Siru Keerai (சிறு கீரை)",
+        "🌱 DrumStick (முருங்கைக்காய்)",
+        "🍆 Brinjal (கத்தரிக்காய்)",
+        "🥒 Ivy Gourd (கோவைக்காய்)",
+        "🌱 Indian Beans (பீன்ஸ்)",
+        "🌱 Indian Broad Beans (அவரைக்காய்)",
+        "🍠 Taro Root (கருணைக்கிழங்கு)",
+        "🍠 Elephant Yam (சேனைக்கிழங்கு)",
+        "🌽 Corn (சோளம்)",
+        "🥬 Cabbage (முட்டைக்கோசு)",
+        "🥦 Cauliflower (பூக்கோசு)",
+        "🌶️ Green Chili (பச்சை மிளகாய்)",
+        "🍄 Mushroom (காளான்)"
+    ];
+
+    const provisionals = [
+        "🌰 Mustard Seeds (கடுகு)",
+        "🌰 Cumin Seeds (சீரகம்)",
+        "🌿 Coriander Seeds (கொத்தமல்லி விதை)",
+        "🌶️ Chili Powder (மிளகாய் தூள்)",
+        "🟡 Turmeric Powder (மஞ்சள் தூள்)",
+        "⚫ Black Pepper (மிளகு)",
+        "🧂 Salt (உப்பு)",
+        "🍚 Rice (அரிசி)",
+        "🌾 Wheat Flour (கோதுமை மாவு)",
+        "🍲 Toor Dal (துவரம் பருப்பு)",
+        "🥣 Urad Dal (உளுந்து பருப்பு)",
+        "🥬 Moong Dal (பாசிப்பருப்பு)",
+        "🥜 Groundnut (வேர்க்கடலை)",
+        "🥥 Coconut Oil (தேங்காய் எண்ணெய்)",
+        "🫒 Gingelly Oil (நல்லெண்ணெய்)",
+        "🥛 Ghee (நெய்)",
+        "🍯 Jaggery (வெல்லம்)",
+        "🍬 Sugar (சர்க்கரை)",
+        "🥤 Tamarind (புளி)",
+        "🥗 Fenugreek Seeds (வெந்தயம்)",
+        "🥫 Sambar Powder (சாம்பார் பொடி)",
+        "🥫 Rasam Powder (ரசம் பொடி)"
+    ];
+
+    const specialItems = [
+        "🥚 Eggs (முட்டை)",
+        "🍜 Maggi Noodles (மக்ஜி நூடுல்ஸ்)",
+        "🌴 Dates (பேரிச்சம்பழம்)",
+        "🥜 Mixed Nuts (மிக்ஸ் நட்ஸ்)",
+        "🥜 Cashew (முந்திரி)",
+        "🥜 Almonds (பாதாம்)",
+        "🥜 Pistachios (பிஸ்தா)",
+        "🥜 Walnuts (அக்ரோட்)",
+        "🥛 Milk (பால்)",
+        "🧀 Paneer (பனீர்)",
+        "🍞 Bread (ரொட்டி)",
+        "🍪 Biscuits (பிஸ்கட்)",
+        "🍫 Chocolate (சாக்லேட்)",
+        "🥤 Soft Drinks (சோடா)"
+    ];
+
     const vegTableBody = document.getElementById("vegTableBody");
+    const provTableBody = document.getElementById("provTableBody");
+    const specialTableBody = document.getElementById("specialTableBody");
 
-    // Build table rows with dropdowns
-    vegetables.forEach(veg => {
+    let selections = {};
+
+    function createRow(item, options, category) {
         const row = document.createElement("tr");
-
-        const vegCell = document.createElement("td");
-        vegCell.textContent = veg;
-
+        const itemCell = document.createElement("td");
+        itemCell.textContent = item;
         const qtyCell = document.createElement("td");
-        const qtyDropdown = document.createElement("select");
-        qtyDropdown.innerHTML = `
-        <option value="0">-- Select --</option>
-        <option value="0.25">250 gm</option>
-        <option value="0.5">500 gm</option>
-        <option value="1">1 kg</option>
-        <option value="2">2 kg</option>
-        <option value="3">3 kg</option>
-        <option value="4">4 kg</option>
-        <option value="5">5 kg</option>
-      `;
-        qtyCell.appendChild(qtyDropdown);
-
-        row.appendChild(vegCell);
+        options.forEach(opt => {
+            const span = document.createElement("span");
+            span.textContent = opt;
+            span.classList.add("option");
+            span.onclick = () => selectOption(span, item, opt, category);
+            qtyCell.appendChild(span);
+        });
+        row.appendChild(itemCell);
         row.appendChild(qtyCell);
-        vegTableBody.appendChild(row);
+        return row;
+    }
+
+    function selectOption(element, item, qty, category) {
+        // remove highlight from siblings
+        element.parentNode.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+        element.classList.add('selected');
+        // save selection
+        if (!selections[category]) selections[category] = {};
+        selections[category][item] = qty;
+    }
+
+    // Build vegetable rows
+    vegetables.forEach(veg => {
+        let opts = veg.includes("Keerai") ? ["1 bunch","2 bunches","3 bunches"] : ["250 gm","500 gm","1 kg","2 kg"];
+        vegTableBody.appendChild(createRow(veg, opts, "vegetables"));
     });
 
-    function showSelection() {
-        const selections = [];
-        const rows = vegTableBody.querySelectorAll("tr");
+    // Build provisionals rows
+    provisionals.forEach(item => {
+        let opts = ["50 gm","100 gm","250 gm","500 gm","1 kg"];
+        provTableBody.appendChild(createRow(item, opts, "provisionals"));
+    });
 
-        rows.forEach((row, index) => {
-            const dropdown = row.querySelector("select");
-            if (dropdown.value !== "0") {
-                selections.push(vegetables[index] + " - " + dropdown.options[dropdown.selectedIndex].text);
-            }
-        });
+    // Build special items rows
+    specialItems.forEach(item => {
+        let opts;
+        if (item.includes("Eggs")) opts = ["Half dozen","1 dozen","2 dozen"];
+        else if (item.includes("Maggi")) opts = ["1 pack","2 packs","5 packs"];
+        else opts = ["100 gm","250 gm","500 gm"];
+        specialTableBody.appendChild(createRow(item, opts, "special"));
+    });
 
-        // Add dotted line separator before the list
-        const message = "----Vegetables List----\n" + selections.join("\n");
+    function showTable(type) {
+        document.getElementById("vegetablesTable").classList.add("hidden");
+        document.getElementById("provisionalsTable").classList.add("hidden");
+        document.getElementById("specialTable").classList.add("hidden");
+        document.getElementById("vegSubmitBtn").classList.add("hidden");
+        document.getElementById("provSubmitBtn").classList.add("hidden");
+        document.getElementById("specialSubmitBtn").classList.add("hidden");
 
-        // Show neatly on page
-        document.getElementById("selection").textContent =
-            selections.length > 0 ? "You selected:\n" + selections.join("\n") : "No vegetables selected.";
-
-        if (selections.length > 0) {
-            fetch("/api/sendSms", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: message })
-            })
-                .then(res => res.text())
-                .then(data => alert("SMS sent: " + data))
-                .catch(err => alert("Error sending SMS: " + err));
+        if (type === "vegetables") {
+            document.getElementById("vegetablesTable").classList.remove("hidden");
+            document.getElementById("vegSubmitBtn").classList.remove("hidden");
+        } else if (type === "provisionals") {
+            document.getElementById("provisionalsTable").classList.remove("hidden");
+            document.getElementById("provSubmitBtn").classList.remove("hidden");
+        } else if (type === "special") {
+            document.getElementById("specialTable").classList.remove("hidden");
+            document.getElementById("specialSubmitBtn").classList.remove("hidden");
         }
     }
 
+    function sendVegetables() {
+        sendMessage(selections["vegetables"]);
+    }
+    function sendProvisionals() {
+        sendMessage(selections["provisionals"]);
+    }
+    function sendSpecial() {
+        sendMessage(selections["special"]);
+    }
 
+    function sendMessage(sectionSelections) {
+        if (!sectionSelections) {
+            document.getElementById("selection").textContent = "No items selected.";
+            return;
+        }
+        const items = Object.entries(sectionSelections).map(([item, qty]) => `${item} - ${qty}`);
+        const message = "----Items List----\n" + items.join("\n");
+        document.getElementById("selection").textContent = "You selected:\n" + items.join("\n");
 
-
+        fetch("/api/sendSms", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: message })
+        })
+            .then(res => res.text())
+            .then(data => alert("SMS sent: " + data))
+            .catch(err => alert("Error sending SMS: " + err));
+    }
 </script>
+...
+
+
+<!-- Dummy elements to satisfy linter -->
+<div class="option hidden"></div>
+<div class="option selected hidden"></div>
 
 </body>
 </html>

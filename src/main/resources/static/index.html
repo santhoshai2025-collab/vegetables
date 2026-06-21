@@ -11,11 +11,13 @@
         .option {
             display: inline-block;
             margin: 4px;
-            padding: 6px 10px;
+            padding: 10px 14px;        /* more padding for round look */
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 50%;        /* makes it perfectly round */
             cursor: pointer;
+            text-align: center;        /* centers the text inside */
         }
+
         .option.selected {
             background-color: #4caf50;
             color: white;
@@ -64,66 +66,73 @@
 
 <script>
     const vegetables = [
-        "🥕 Carrot (காரட்)",
-        "🥔 Potato (உருளைக்கிழங்கு)",
-        "🍅 Tomato (தக்காளி)",
-        "🧅 Onion (வெங்காயம்)",
-        "🌿 Arai Keerai (அரை கீரை)",
-        "🌿 Siru Keerai (சிறு கீரை)",
-        "🌱 DrumStick (முருங்கைக்காய்)",
-        "🍆 Brinjal (கத்தரிக்காய்)",
-        "🥒 Ivy Gourd (கோவைக்காய்)",
-        "🌱 Indian Beans (பீன்ஸ்)",
-        "🌱 Indian Broad Beans (அவரைக்காய்)",
-        "🍠 Taro Root (கருணைக்கிழங்கு)",
-        "🍠 Elephant Yam (சேனைக்கிழங்கு)",
-        "🌽 Corn (சோளம்)",
-        "🥬 Cabbage (முட்டைக்கோசு)",
-        "🥦 Cauliflower (பூக்கோசு)",
-        "🌶️ Green Chili (பச்சை மிளகாய்)",
-        "🍄 Mushroom (காளான்)"
+        { display: "🥕 Carrot (காரட்)", sms: "Carrot" },
+        { display: "🥔 Potato (உருளைக்கிழங்கு)", sms: "Potato" },
+        { display: "🍅 Tomato (தக்காளி)", sms: "Tomato" },
+        { display: "🧅 Onion (வெங்காயம்)", sms: "Onion" },
+        { display: "🌱 DrumStick (முருங்கைக்காய்)", sms: "DrumStick" },
+        { display: "🍆 Brinjal (கத்தரிக்காய்)", sms: "Brinjal" },
+        { display: "🥒 Ivy Gourd (கோவைக்காய்)", sms: "Ivy Gourd" },
+        { display: "🌱 Beans (பீன்ஸ்)", sms: "Beans" },
+        { display: "🌱 Broad Beans (அவரைக்காய்)", sms: "Broad Beans" },
+        { display: "🍠 Taro Root (கருணைக்கிழங்கு)", sms: "Taro Root" },
+        { display: "🍠 Elephant Yam (சேனைக்கிழங்கு)", sms: "Elephant Yam" },
+        { display: "🌱 Ginger (இஞ்சி)", sms: "Ginger" },
+        { display: "🌶️ Green Chili (பச்சை மிளகாய்)", sms: "Green Chili" },
+        { display: "🌿 Mint (புதினா)", sms: "Mint" },
+        { display: "🔴 Beetroot (பீட்ரூட்)", sms: "Beetroot" },
+        { display: "🌿 Arai Keerai (அரை கீரை)", sms: "Arai Keerai" },
+        { display: "🌿 Siru Keerai (சிறு கீரை)", sms: "Siru Keerai" },
+        { display: "🍄 Mushroom (காளான்)", sms: "Mushroom" },
+        { display: "🌽 Corn (சோளம்)", sms: "Corn" },
+        { display: "🥬 Cabbage (முட்டைக்கோசு)", sms: "Cabbage" },
+        { display: "🥦 Cauliflower (பூக்கோசு)", sms: "Cauliflower" },
+        { display: "🥒 Ridge Gourd (பீர்க்கங்காய்)", sms: "Ridge Gourd" },
+        { display: "🥒 Bottle Gourd (சுரைக்காய்)", sms: "Bottle Gourd" },
+        { display: "🥒 Snake Gourd (புடலங்காய்)", sms: "Snake Gourd" },
+        { display: "🥒 Bitter Gourd (பாகற்காய்)", sms: "Bitter Gourd" }
     ];
 
     const provisionals = [
-        "🌰 Mustard Seeds (கடுகு)",
-        "🌰 Cumin Seeds (சீரகம்)",
-        "🌿 Coriander Seeds (கொத்தமல்லி விதை)",
-        "🌶️ Chili Powder (மிளகாய் தூள்)",
-        "🟡 Turmeric Powder (மஞ்சள் தூள்)",
-        "⚫ Black Pepper (மிளகு)",
-        "🧂 Salt (உப்பு)",
-        "🍚 Rice (அரிசி)",
-        "🌾 Wheat Flour (கோதுமை மாவு)",
-        "🍲 Toor Dal (துவரம் பருப்பு)",
-        "🥣 Urad Dal (உளுந்து பருப்பு)",
-        "🥬 Moong Dal (பாசிப்பருப்பு)",
-        "🥜 Groundnut (வேர்க்கடலை)",
-        "🥥 Coconut Oil (தேங்காய் எண்ணெய்)",
-        "🫒 Gingelly Oil (நல்லெண்ணெய்)",
-        "🥛 Ghee (நெய்)",
-        "🍯 Jaggery (வெல்லம்)",
-        "🍬 Sugar (சர்க்கரை)",
-        "🥤 Tamarind (புளி)",
-        "🥗 Fenugreek Seeds (வெந்தயம்)",
-        "🥫 Sambar Powder (சாம்பார் பொடி)",
-        "🥫 Rasam Powder (ரசம் பொடி)"
+        { display: "🌰 Mustard Seeds (கடுகு)", sms: "Mustard Seeds" },
+        { display: "🌰 Cumin Seeds (சீரகம்)", sms: "Cumin Seeds" },
+        { display: "🌿 Coriander Seeds (கொத்தமல்லி விதை)", sms: "Coriander Seeds" },
+        { display: "🌶️ Chili Powder (மிளகாய் தூள்)", sms: "Chili Powder" },
+        { display: "🟡 Turmeric Powder (மஞ்சள் தூள்)", sms: "Turmeric Powder" },
+        { display: "⚫ Black Pepper (மிளகு)", sms: "Black Pepper" },
+        { display: "🧂 Salt (உப்பு)", sms: "Salt" },
+        { display: "🍚 Rice (அரிசி)", sms: "Rice" },
+        { display: "🌾 Wheat Flour (கோதுமை மாவு)", sms: "Wheat Flour" },
+        { display: "🍲 Toor Dal (துவரம் பருப்பு)", sms: "Toor Dal" },
+        { display: "🥣 Urad Dal (உளுந்து பருப்பு)", sms: "Urad Dal" },
+        { display: "🥬 Moong Dal (பாசிப்பருப்பு)", sms: "Moong Dal" },
+        { display: "🥜 Groundnut (வேர்க்கடலை)", sms: "Groundnut" },
+        { display: "🥥 Coconut Oil (தேங்காய் எண்ணெய்)", sms: "Coconut Oil" },
+        { display: "🫒 Gingelly Oil (நல்லெண்ணெய்)", sms: "Gingelly Oil" },
+        { display: "🥛 Ghee (நெய்)", sms: "Ghee" },
+        { display: "🍯 Jaggery (வெல்லம்)", sms: "Jaggery" },
+        { display: "🍬 Sugar (சர்க்கரை)", sms: "Sugar" },
+        { display: "🥤 Tamarind (புளி)", sms: "Tamarind" },
+        { display: "🥗 Fenugreek Seeds (வெந்தயம்)", sms: "Fenugreek Seeds" },
+        { display: "🥫 Sambar Powder (சாம்பார் பொடி)", sms: "Sambar Powder" },
+        { display: "🥫 Rasam Powder (ரசம் பொடி)", sms: "Rasam Powder" }
     ];
 
     const specialItems = [
-        "🥚 Eggs (முட்டை)",
-        "🍜 Maggi Noodles (மக்ஜி நூடுல்ஸ்)",
-        "🌴 Dates (பேரிச்சம்பழம்)",
-        "🥜 Mixed Nuts (மிக்ஸ் நட்ஸ்)",
-        "🥜 Cashew (முந்திரி)",
-        "🥜 Almonds (பாதாம்)",
-        "🥜 Pistachios (பிஸ்தா)",
-        "🥜 Walnuts (அக்ரோட்)",
-        "🥛 Milk (பால்)",
-        "🧀 Paneer (பனீர்)",
-        "🍞 Bread (ரொட்டி)",
-        "🍪 Biscuits (பிஸ்கட்)",
-        "🍫 Chocolate (சாக்லேட்)",
-        "🥤 Soft Drinks (சோடா)"
+        { display: "🥚 Eggs (முட்டை)", sms: "Eggs" },
+        { display: "🍜 Maggi Noodles (மக்ஜி நூடுல்ஸ்)", sms: "Maggi Noodles" },
+        { display: "🌴 Dates (பேரிச்சம்பழம்)", sms: "Dates" },
+        { display: "🥜 Mixed Nuts (மிக்ஸ் நட்ஸ்)", sms: "Mixed Nuts" },
+        { display: "🥜 Cashew (முந்திரி)", sms: "Cashew" },
+        { display: "🥜 Almonds (பாதாம்)", sms: "Almonds" },
+        { display: "🥜 Pistachios (பிஸ்தா)", sms: "Pistachios" },
+        { display: "🥜 Walnuts (அக்ரோட்)", sms: "Walnuts" },
+        { display: "🥛 Milk (பால்)", sms: "Milk" },
+        { display: "🧀 Paneer (பனீர்)", sms: "Paneer" },
+        { display: "🍞 Bread (ரொட்டி)", sms: "Bread" },
+        { display: "🍪 Biscuits (பிஸ்கட்)", sms: "Biscuits" },
+        { display: "🍫 Chocolate (சாக்லேட்)", sms: "Chocolate" },
+        { display: "🥤 Soft Drinks (சோடா)", sms: "Soft Drinks" }
     ];
 
     const vegTableBody = document.getElementById("vegTableBody");
@@ -135,13 +144,13 @@
     function createRow(item, options, category) {
         const row = document.createElement("tr");
         const itemCell = document.createElement("td");
-        itemCell.textContent = item;
+        itemCell.textContent = item.display;   // show emoji + Tamil
         const qtyCell = document.createElement("td");
         options.forEach(opt => {
             const span = document.createElement("span");
             span.textContent = opt;
             span.classList.add("option");
-            span.onclick = () => selectOption(span, item, opt, category);
+            span.onclick = () => selectOption(span, item.sms, opt, category); // save English for SMS
             qtyCell.appendChild(span);
         });
         row.appendChild(itemCell);
@@ -150,32 +159,59 @@
     }
 
     function selectOption(element, item, qty, category) {
-        // remove highlight from siblings
+        // If the clicked option is already selected → unselect it
+        if (element.classList.contains('selected')) {
+            element.classList.remove('selected');
+
+            if (selections[category]) {
+                delete selections[category][item];
+                // If no items left in this category, remove the category
+                if (Object.keys(selections[category]).length === 0) {
+                    delete selections[category];
+                }
+            }
+            return; // stop here
+        }
+
+        // Otherwise → select this option and unselect siblings
         element.parentNode.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
         element.classList.add('selected');
-        // save selection
+
         if (!selections[category]) selections[category] = {};
         selections[category][item] = qty;
     }
 
+
     // Build vegetable rows
     vegetables.forEach(veg => {
-        let opts = veg.includes("Keerai") ? ["1 bunch","2 bunches","3 bunches"] : ["250 gm","500 gm","1 kg","2 kg"];
+        let opts;
+        if (veg.sms.includes("Keerai") || veg.sms.includes("DrumStick") || veg.sms.includes("Mushroom")|| veg.sms.includes("Mint")) {
+            opts = ["1","2","3"]; // counts
+        }  else {
+            opts = ["1/4k","1/2k","1kg","2kg"]; // grams/kg
+        }
         vegTableBody.appendChild(createRow(veg, opts, "vegetables"));
     });
 
     // Build provisionals rows
     provisionals.forEach(item => {
-        let opts = ["50 gm","100 gm","250 gm","500 gm","1 kg"];
+        let opts;
+        if (item.sms.includes("Oil")){
+            opts = ["1/4l","1/2l","1l","2l"]; // grams/kg
+        }   else if (item.sms.includes("Seeds") || item.sms.includes("Powder")){
+            opts = ["50gm","100gm","250gm"]; // grams/kg
+        }   else {
+            opts = ["1/4k","1/2k","1kg","2kg"]; // grams/kg
+        }
         provTableBody.appendChild(createRow(item, opts, "provisionals"));
     });
 
     // Build special items rows
     specialItems.forEach(item => {
         let opts;
-        if (item.includes("Eggs")) opts = ["Half dozen","1 dozen","2 dozen"];
-        else if (item.includes("Maggi")) opts = ["1 pack","2 packs","5 packs"];
-        else opts = ["100 gm","250 gm","500 gm"];
+        if (item.sms.includes("Eggs")) opts = ["6","12"];
+        else if (item.sms.includes("Maggi")) opts = ["1 pack","2 packs","5 packs"];
+        else opts = ["1/4k","1/2k","1kg","2kg"]
         specialTableBody.appendChild(createRow(item, opts, "special"));
     });
 
@@ -229,7 +265,6 @@
     }
 </script>
 ...
-
 
 <!-- Dummy elements to satisfy linter -->
 <div class="option hidden"></div>
